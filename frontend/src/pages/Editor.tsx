@@ -1,6 +1,5 @@
 import React from 'react';
 import { FileCode } from 'lucide-react';
-import config from '@/config';
 interface EditorProps {
   code: string;
   setCode: (code: string) => void;

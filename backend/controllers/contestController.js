@@ -133,7 +133,7 @@ const isUserRegistered = async (req, res) => {
 
 const getFinalRanklist = async (req, res) => {
    const { id: contest_id } = req.params;
-   if(!contest_id) {
+   if (!contest_id) {
       return res.status(400).json({ message: "Contest ID is required" });
    }
    try {
@@ -143,22 +143,130 @@ const getFinalRanklist = async (req, res) => {
          .eq("contest_id", contest_id);
 
       if (error) throw error;
-      // res.json({data});
-      // Process the data to create the final ranklist
-      const ranklist = data.reduce((acc, submission) => {
-         if (!acc[submission.user_id]) {
-            acc[submission.user_id] = { score: 0, verdicts: [] };
-         }
-         acc[submission.user_id].verdicts.push(submission.verdict);
-         console.log(submission);
-         acc[submission.user_id].score += submission.verdict === "AC" ? 2 : -1;
-         return acc;
-      }, {});
 
-      res.json({ranklist});
+      // Process the data to create the final ranklist
+      const ranklist = {};
+
+      for (const submission of data) {
+         if (!ranklist[submission.user_id]) {
+            // Fetch the username for the user
+            const { data: userData, error: userError } = await supabase
+               .from("users")
+               .select("username")
+               .eq("id", submission.user_id)
+               .single();
+
+            if (userError) throw userError;
+
+            ranklist[submission.user_id] = {
+               score: 0,
+               verdicts: [],
+               username: userData.username, // Extract the username
+            };
+         }
+
+         // Add the verdict to the user's data
+         ranklist[submission.user_id].verdicts.push(submission.verdict);
+
+         // Update the score based on the verdict
+         if (submission.verdict === "AC") {
+            ranklist[submission.user_id].score += 2;
+         } else if (submission.verdict === "WA" || submission.verdict === "TLE") {
+            ranklist[submission.user_id].score -= 1;
+         }
+      }
+
+      // Convert the ranklist object into an array
+      const ranklistArray = Object.entries(ranklist).map(([user_id, details]) => ({
+         user_id,
+         username: details.username,
+         score: details.score,
+         verdicts: details.verdicts,
+      }));
+
+      // Sort the ranklist array in descending order of scores
+      ranklistArray.sort((a, b) => b.score - a.score);
+
+      // Add rank to each user
+      ranklistArray.forEach((entry, index) => {
+         entry.rank = index + 1;
+      });
+
+      res.json({ ranklist: ranklistArray });
    } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Error fetching final ranklist" });
    }
-}
+};
+// const getFinalRanklist = async (req, res) => {
+//    const { id: contest_id } = req.params;
+//    if(!contest_id) {
+//       return res.status(400).json({ message: "Contest ID is required" });
+//    }
+//    try {
+//       const { data, error } = await supabase
+//          .from("contest_submissions")
+//          .select("user_id, verdict")
+//          .eq("contest_id", contest_id);
+
+//       if (error) throw error;
+//       // res.json({data});
+//       // Process the data to create the final ranklist
+
+//       const ranklist = data.reduce((acc, submission) => {
+//          if (!acc[submission.user_id]) {
+//             acc[submission.user_id] = { score: 0, verdicts: [], username: "" };
+//          }
+//          uid = submission.user_id;
+//          const getUser = async (uid) => {
+//             try {
+//                const { data, error } = await supabase
+//                .from("users")
+//                .select("username")
+//                .eq("id", uid);
+//             console.log({data});
+//             if (error) throw error;
+//             return data.username;
+//             } catch (error) {
+//                console.error(error);
+//                res.status(500).json({ message: "Error fetching user" });
+//             }    
+//          }
+//          uname = getUser(uid);
+//          console.log({uname});
+//          acc[submission.user_id].verdicts.push(submission.verdict);
+//          console.log(submission);
+//          if(submission.verdict === "AC") {
+//             acc[submission.user_id].score += 2;
+//          } 
+//          if(submission.verdict === "WA") {
+//             acc[submission.user_id].score -= 1;
+//          }
+//          if(submission.verdict === "TLE") {
+//             acc[submission.user_id].score -= 1;
+//          }
+//          return acc;
+//       }, {});
+
+//       const ranklistArray = Object.entries(ranklist).map(([user_id, details]) => ({
+//          user_id,
+//          username: details.username,
+//          score: details.score,
+//          verdicts: details.verdicts,
+//       }));
+
+//       // Sort the ranklist array in descending order of scores
+//       ranklistArray.sort((a, b) => b.score - a.score);
+
+//       // Add rank to each user
+//       ranklistArray.forEach((entry, index) => {
+//          entry.rank = index + 1;
+//       });
+
+//       res.json({ ranklist: ranklistArray });
+//    } catch (error) {
+//       console.error(error);
+//       res.status(500).json({ message: "Error fetching final ranklist" });
+//    }
+// }
 module.exports = { getFinalRanklist, isUserRegistered, registerContest, getContests, addContest, getContest, addQuestions };

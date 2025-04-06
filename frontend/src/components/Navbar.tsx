@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import { useState,useEffect } from 'react';
 import { Menu, X, ChevronDown, Code, Terminal, Users, BookOpen, Calendar } from 'lucide-react';
 
 const Navbar = () => {
@@ -9,7 +9,7 @@ const Navbar = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const toggleDropdown = (dropdown) => {
+  const toggleDropdown = (dropdown :any) => {
     setActiveDropdown(activeDropdown === dropdown ? null : dropdown);
   };
 

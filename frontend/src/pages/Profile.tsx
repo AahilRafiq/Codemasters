@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { UserCircle, LogOut, Mail, Briefcase } from 'lucide-react';
 import config from "@/config";
 

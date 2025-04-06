@@ -1,18 +1,21 @@
-import React, { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { io } from "socket.io-client";
 import Editor from "@monaco-editor/react";
 import "./RealTimeEditor.css";
 import config from "@/config";
+import { Socket } from "socket.io-client";
+import * as monaco from "monaco-editor";
 
 export default function RealTimeCodeEditor() {
-    const [socket, setSocket] = useState(null);
+    const [socket, setSocket] = useState<Socket | null>(null);
     const [editorReady, setEditorReady] = useState(false);
-    const editorRef = useRef(null);
+    const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
     const isEditing = useRef(false);
 
     // Initialize socket connection
     useEffect(() => {
-        const s = io(`http://${config.SOCKET_URL}`);
+        const socketUrl = config.SOCKET_URL;
+        const s = io(socketUrl);
         setSocket(s);
 
         return () => {
@@ -20,7 +23,7 @@ export default function RealTimeCodeEditor() {
         };
     }, []);
 
-    const handleEditorMount = (editor) => {
+    const handleEditorMount = (editor :any) => {
         editorRef.current = editor;
         setEditorReady(true);
     };
@@ -32,13 +35,17 @@ export default function RealTimeCodeEditor() {
         const handleEditorChange = () => {
             if (isEditing.current) return;
             
-            const content = editorRef.current.getValue();
+            const content = editorRef.current ? editorRef.current.getValue() : "";
             socket.emit("send-changes", content);
+            console.log("Content sent to server:", content);
         };
     
-        const handleContentChange = (content) => {
+        const handleContentChange = (content :any) => {
             isEditing.current = true;
-            editorRef.current.setValue(content);
+            if (editorRef.current) {
+                editorRef.current.setValue(content);
+                console.log("Content received from server:", content);
+            }
             setTimeout(() => {
                 isEditing.current = false;
             }, 0);

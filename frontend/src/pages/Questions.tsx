@@ -20,7 +20,7 @@ const QuestionsList = () => {
         setLoading(false);
       })
       .catch(error => {
-        setError("Failed to fetch questions");
+        setError(`Failed to fetch questions ${error.message}`);
         setLoading(false);
       });
   }, []);

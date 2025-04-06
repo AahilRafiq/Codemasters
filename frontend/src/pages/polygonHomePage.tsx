@@ -6,7 +6,7 @@ import { StarIcon, LockIcon, PencilIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Link,useNavigate } from "react-router-dom";
 import { PolygonProblemType } from "../types/polygon";
-import { fetchendpoint,loadCredentials } from "@/services/polygon";
+import {loadCredentials } from "@/services/polygon";
 import config from "@/config";
 
 interface ProblemTileProps {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios';
 import { Contest, DSAQuestion, MCQQuestion } from '@/types/contest';
@@ -81,6 +81,7 @@ const ContestPage = () => {
   }, [contest]);
 
   const filterDsaQuestions = (questions: DSAQuestion[]) => {
+    if(!authorized) return;
     if (questions && contest && contest.questions) {
       const reqQuestions = questions.filter((question) => {
         return contest.questions.includes(question.id);

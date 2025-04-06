@@ -18,8 +18,9 @@ interface QuestionFormData {
   visibleTestCases:number;
   numTestCases:number;
   exampleInput: object;
-  expectedOutput: object;
+  expectedOutput: { [key: string]: string };
   constraintData: string;
+  [key: string]: any;
 }
 
 export const AddQuestionForm = () => {
@@ -62,7 +63,7 @@ export const AddQuestionForm = () => {
     try {
       setLoading(true);
       console.log("in the loop")
-      const data = await fetchendpoint(apiKey,secret,problemId,'polygon-question');
+      const data = await fetchendpoint(apiKey,secret,problemId || '','polygon-question');
       console.log("question:",data);
       console.log("out the loop")
       if (data?.QuestionData) {
@@ -75,23 +76,12 @@ export const AddQuestionForm = () => {
         }));
     }
 
-    
-  
-
-  
-  
-    
-      // console.log(formData)
-    
     } catch (error) {
       console.log(error)
     }
     finally{
       setLoading(false)
     }
-    
-    
-
 }
   
 

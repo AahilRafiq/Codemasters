@@ -4,7 +4,7 @@ import axios from 'axios';
 import Editor from './Editor';
 import ActionBar from './ActionBar';
 import QuestionCard from './QuestionCard';
-import { TaskResult, createTask } from '../types/Task';
+import { createTask } from '../types/Task';
 import { FullQuestionProps } from '@/types/question';
 import config from '@/config';
 
@@ -20,7 +20,7 @@ const TaskFetcher: React.FC = () => {
   const [currentOutput, setCurrentOutput] = useState<string | null>(null);
   const userid = localStorage.getItem('token');
   const [submission, setSubmission] = useState(false);
-  const [action,setAction] = useState("run");
+  const action = "run";
 
   // Fetch question details from the API using questionId
   const [question, setQuestion] = useState<FullQuestionProps | null>(null);
@@ -73,15 +73,15 @@ const TaskFetcher: React.FC = () => {
       } else {
         setTimeout(() => pollTaskResult(taskId, actionType), 500);
       }
-    } catch (err) {
+    }catch (err: unknown) {
       if (axios.isAxiosError(err) && err.response?.status === 404) {
         setTimeout(() => pollTaskResult(taskId, actionType), 500);
       } else {
-        setError(err.message || "Failed to fetch result");
+        setError((err instanceof Error ? err.message : "Failed to fetch result"));
         setIsPolling(false);
         setIsLoading(false);
       }
-    }
+    }    
   };  
 
   const handleLanguageChange = (newLanguage: string): void => {

@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import RealTimeCodeEditor from "./RealTimeEditor";
 import QuestionCard from "./QuestionCard";
 import axios from "axios";
 import config from "@/config";
 
+
 const RealTimeEditorWithSidebar = () => {
-  const [questions, setQuestions] = useState([]);
-  const [selectedQuestion, setSelectedQuestion] = useState(null);
+  const [questions, setQuestions] = useState<any[]>([]);
+  const [selectedQuestion, setSelectedQuestion] = useState<any | null>(null);
   const [currentInput, setcurrentInput] = useState<string | null>(null);
   const [currentOutput, setcurrentOutput] = useState<string | null>(null);
 
@@ -49,7 +50,7 @@ const RealTimeEditorWithSidebar = () => {
         // Main Content (QuestionCard + Editor)
         <div className="w-100 p-4 flex flex-col gap-4 overflow-y-auto">
           <QuestionCard
-            {...selectedQuestion}
+            {...(selectedQuestion || {})}
             currentInput={currentInput}
             setcurrentInput={setcurrentInput}
             currentOutput={currentOutput}

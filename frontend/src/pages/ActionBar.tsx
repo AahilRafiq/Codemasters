@@ -1,6 +1,5 @@
 import React from 'react';
 import { Send, Play, Loader2 } from 'lucide-react';
-import config from '@/config';
 interface ActionBarProps {
   onRun: () => void;
   onSubmit: () => void;

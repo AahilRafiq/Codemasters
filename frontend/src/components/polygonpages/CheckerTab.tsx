@@ -2,7 +2,6 @@ import React,{useState,useEffect} from "react";
 import { Button } from "@/components/ui/button";
 import { fetchendpoint } from "@/services/polygon";
 import { Textarea } from "@/components/ui/textarea";
-import { set } from "react-hook-form";
 import config from "@/config";
 
 export const CheckerTab: React.FC<{  apiKey: string, secret: string, problemId: string }> = ({ apiKey, secret, problemId }) => {
