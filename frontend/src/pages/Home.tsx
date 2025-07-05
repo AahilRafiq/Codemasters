@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Code2, Trophy, Building2, Brain, Rocket, ArrowRight } from "lucide-react";
+import { Code2, Trophy, Building2, Brain, Rocket, ArrowRight, Plus } from "lucide-react";
+import { Link } from "react-router-dom";
 
 function App() {
   return (
@@ -16,12 +17,17 @@ function App() {
             Master coding challenges, compete in contests, and get noticed by top companies
           </p>
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg">
-              Start Coding <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-            <Button size="lg" variant="outline">
-              Host a Contest
-            </Button>
+            <Link to="/questions">
+              <Button size="lg">
+                Start Coding <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
+            <Link to="/questions/new">
+              <Button size="lg" variant="outline">
+                <Plus className="mr-2 h-4 w-4" />
+                Create Problem
+              </Button>
+            </Link>
           </div>
         </div>
       </header>
