@@ -14,6 +14,45 @@ const runQueue = SingletonContainer.getRunQueue();
 const submitQueue = SingletonContainer.getSubmitQueue();
 
 
+// POST /question
+export async function createQuestion(req: Request, res: Response) {
+    try {
+        const {
+            title,
+            description,
+            testcase,
+            expected_output,
+            difficulty,
+            contestId,
+            topics,
+            run_timeout,
+            compile_timeout,
+            run_memory_limit,
+            compile_memory_limit
+        } = req.body;
+
+        const result = await db.insert(Questions).values({
+            title,
+            description,
+            testcase,
+            expected_output,
+            difficulty,
+            contestId,
+            topics,
+            run_timeout,
+            compile_timeout,
+            run_memory_limit,
+            compile_memory_limit
+        }).returning({ id: Questions.id });
+
+        res.status(201).json({ id: result[0].id, message: 'Question created successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
 // GET /question/:id
 export async function getQuestion(req: Request, res: Response) {
     try {
