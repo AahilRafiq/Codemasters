@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Code2, Trophy, Building2, Users, Brain, Rocket, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Code2, Trophy, Building2, Brain, Rocket, ArrowRight } from "lucide-react";
 
 function App() {
   return (

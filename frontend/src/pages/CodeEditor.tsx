@@ -50,7 +50,6 @@ function CodeEditor({questionPromise}: {questionPromise: Promise<Question>}) {
   const [output, setOutput] = useState('');
   const [language, setLanguage] = useState<typeof supportedLangs[0]>(supportedLangs[0]);
   const [isPending, startTransition] = useTransition();
-  const [submissionId, setSubmissionId] = useState(0);
   const [outputMode, setOutputMode] = useState<'run' | 'submit'>('run');
   const [submissionStatus, setSubmissionStatus] = useState<submissionStatusEnum | null>(null);
   const question = use(questionPromise)
@@ -88,7 +87,6 @@ function CodeEditor({questionPromise}: {questionPromise: Promise<Question>}) {
       try {
         const res = await submitCode(1, question, code, language.id, input);
         const {submissionId} = await res.json();
-        setSubmissionId(submissionId);
         await pollSubmitOutput(submissionId);
       } catch(err) {
         console.error(err);
