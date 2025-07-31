@@ -1,8 +1,9 @@
 import express from 'express'
-import { getQuestion,getRunQuestion,getSubmitQuestion,runQuestion,submitQuestion } from "../controllers/questionControllers.ts"
+import { getQuestion,getRunQuestion,getSubmitQuestion,runQuestion,submitQuestion,createQuestion } from "../controllers/questionControllers.ts"
 
 const router = express.Router()
 
+router.post('/', createQuestion)
 router.post('/run', runQuestion)
 router.get('/run', getRunQuestion)
 router.get('/:id', getQuestion)

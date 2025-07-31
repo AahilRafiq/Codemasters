@@ -1,7 +1,7 @@
 import { CodeRequestBody } from "@/types/CodeRequestBody";
 import type { Question } from "@/types/question";
 
-export async function submitCode(userId: number, question: Question, code: string, language: string, input: string) {
+export async function submitCode(userId: number, question: Question, code: string, language: string, _input: string) {
     
     let url = import.meta.env.VITE_BACKEND_URL + '/question/submit';
     const body: CodeRequestBody = {

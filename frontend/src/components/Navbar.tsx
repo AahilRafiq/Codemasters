@@ -23,6 +23,9 @@ export default function () {
                         Home
                     </Button>
                 </Link>
+                <Link to="/questions/new">
+                    <Button variant="ghost">Create Problem</Button>
+                </Link>
                 <Link to="/about">
                     <Button variant="ghost">About</Button>
                 </Link>
@@ -46,6 +49,9 @@ export default function () {
                             <Button variant="ghost" color="black">
                                 Home
                             </Button>
+                        </Link>
+                        <Link to="/questions/new">
+                            <Button variant="ghost">Create Problem</Button>
                         </Link>
                         <Link to="/about">
                             <Button variant="ghost">About</Button>
